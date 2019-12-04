@@ -1,3 +1,12 @@
+# Zookeeper watcher as configuration 
+- zookeeper 를 configruration 으로 활용하는 예제 입니다.
+- 중간에 캐시를 두어 비즈니스로직에 조금? 더 집중하게 합니다.
+- watcher 는 znode 의 특정 경로를 감시합니다.
+- 변경이 발생될 경우 watcher 는 handler 를 작동시켜 캐시에 값을 갱신합니다.
+- App 은 항상 캐시로부터 설정 정보를 획득할수 있습니다.
+
+> :warning: 디테일한 lifecycle이 정의되지 않았습니다. 어디까지나 예제.
+
 # build base image (pre-required)
 기본 이미지를 미리 빌드해주세요.
 > :warning: docker repo 의 lejewk 경로에는 해당 이미지가 없습니다.
