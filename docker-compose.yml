@@ -1,0 +1,61 @@
+version: '3.1'
+
+services:
+  redis_server:
+    image: redis:latest
+    ports:
+      - "6377:6379"
+
+  zoo1:
+    image: zookeeper
+    restart: always
+    hostname: zoo1
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+
+  zoo2:
+    image: zookeeper
+    restart: always
+    hostname: zoo2
+    ports:
+      - 2182:2181
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=0.0.0.0:2888:3888;2181 server.3=zoo3:2888:3888;2181
+
+  zoo3:
+    image: zookeeper
+    restart: always
+    hostname: zoo3
+    ports:
+      - 2183:2181
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=0.0.0.0:2888:3888;2181
+
+  zk_watcher:
+    image: zk_watcher:latest
+    build: ./zk_watcher/
+    depends_on:
+      - zoo1
+      - redis_server
+    environment: 
+      - ZOO_HOST_PORT=zoo1:2181
+  
+  my_app:
+    image: my_app:latest
+    build: ./my_app/
+    ports:
+      - "8082:80"
+    depends_on:
+      - zoo1
+      - redis_server
+
+  zk_manager:
+    image: lejewk/zk_base_image:latest
+    depends_on:
+      - zoo1
+    command: tail -f /dev/null
