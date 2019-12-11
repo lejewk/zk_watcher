@@ -1,4 +1,4 @@
-# Zookeeper watcher as configuration 
+# Zookeeper watcher for Configuration 
 - zookeeper 를 configruration 으로 활용하는 예제 입니다.
 - 중간에 캐시를 두어 비즈니스로직에 조금? 더 집중하게 합니다.
 - watcher 는 znode 의 특정 경로를 감시합니다.
